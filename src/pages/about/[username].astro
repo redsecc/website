@@ -1,0 +1,159 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../lib/base';
+import { abs, breadcrumb } from '../../lib/seo';
+
+export async function getStaticPaths() {
+  const team = await getCollection('team');
+  return team.map((member) => ({
+    params: { username: member.id },
+    props: { member },
+  }));
+}
+
+const { member } = Astro.props;
+const { Content } = await render(member);
+
+const jsonLd = [
+  {
+    '@type': 'ProfilePage',
+    name: `${member.data.name} — ${member.data.role}`,
+    url: abs(`/about/${member.id}`),
+    mainEntity: {
+      '@type': 'Person',
+      name: member.data.name,
+      alternateName: member.id,
+      jobTitle: member.data.role,
+      image: abs(member.data.avatar),
+      sameAs: member.data.links.map((l) => l.href),
+    },
+  },
+  breadcrumb([
+    { name: 'About', path: '/about' },
+    { name: member.id, path: `/about/${member.id}` },
+  ]),
+];
+---
+
+<BaseLayout
+  title={`${member.data.name} (${member.id})`}
+  description={member.data.tagline ?? `${member.data.name} — ${member.data.role} at RedSec.`}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <section class="section">
+    <div class="container member">
+      <nav class="crumbs mono" aria-label="Breadcrumb">
+        <a href={withBase('/about')}>about</a>
+        <span aria-hidden="true">/</span>
+        <span>{member.id}</span>
+      </nav>
+
+      <header class="member-head">
+        <img
+          class="member-avatar"
+          src={withBase(member.data.avatar)}
+          width="120"
+          height="120"
+          alt={`${member.data.name} avatar`}
+        />
+        <div class="member-id">
+          <h1>{member.data.name}</h1>
+          <p class="member-handle mono">@{member.id}</p>
+          <p class="member-role">{member.data.role}</p>
+          {member.data.tagline && <p class="member-tagline">{member.data.tagline}</p>}
+          {
+            member.data.links.length > 0 && (
+              <div class="member-links">
+                {member.data.links.map((l) => (
+                  <a class="chip" href={l.href} target="_blank" rel="noopener noreferrer">
+                    {l.label} ↗
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </header>
+
+      <div class="prose member-bio">
+        <Content />
+      </div>
+
+      <p class="member-back">
+        <a class="mono" href={withBase('/')}>← Back to the team</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .member {
+    max-width: var(--maxw-prose);
+  }
+  .crumbs {
+    display: flex;
+    gap: var(--space-2);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-8);
+  }
+  .crumbs a {
+    color: var(--text-secondary);
+  }
+  .member-head {
+    display: flex;
+    gap: var(--space-6);
+    align-items: center;
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-8);
+    border-bottom: var(--hairline);
+  }
+  .member-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--red);
+    flex: none;
+  }
+  .member-id h1 {
+    margin: 0 0 var(--space-1);
+  }
+  .member-handle {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .member-role {
+    margin: var(--space-2) 0 0;
+    color: var(--red-hover);
+    font-size: 0.95rem;
+  }
+  .member-tagline {
+    margin: var(--space-2) 0 0;
+    color: var(--text-secondary);
+  }
+  .member-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+  .member-back {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: var(--hairline);
+  }
+  @media (max-width: 520px) {
+    .member-head {
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+    .member-links {
+      justify-content: center;
+    }
+  }
+</style>

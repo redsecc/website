@@ -2,10 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Logo from '../components/Logo.astro';
 import { Code } from 'astro-expressive-code/components';
+import { getCollection } from 'astro:content';
 import { withBase } from '../lib/base';
 import { SITE } from '../lib/site';
 
 const LEARN = 'https://learn.redsec.cc';
+
+const team = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
 
 // Marketing teasers — these link out to the learning platform; the actual
 // learning materials live on learn.redsec.cc, not here.
@@ -102,6 +105,38 @@ const offerings = [
       </p>
     </div>
   </section>
+
+  <!-- Our team -->
+  {
+    team.length > 0 && (
+      <section class="section team-section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Our team</h2>
+            <span class="mono section-link">{team.length} {team.length === 1 ? 'member' : 'members'}</span>
+          </div>
+          <ul class="team-grid">
+            {team.map((m) => (
+              <li>
+                <a class="team-card" href={withBase(`/about/${m.id}`)}>
+                  <img
+                    class="team-avatar"
+                    src={withBase(m.data.avatar)}
+                    width="96"
+                    height="96"
+                    loading="lazy"
+                    alt={`${m.data.name} avatar`}
+                  />
+                  <span class="team-handle mono">{m.id}</span>
+                  <span class="team-role">{m.data.role}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Community -->
   <section class="section community">
@@ -233,6 +268,68 @@ const offerings = [
   }
   .blurb {
     max-width: var(--maxw-prose);
+  }
+
+  .team-section {
+    border-top: var(--hairline);
+  }
+  .team-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+  @media (min-width: 640px) {
+    .team-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 900px) {
+    .team-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2);
+    padding: var(--space-6) var(--space-4);
+    background: var(--surface);
+    border: var(--hairline);
+    border-radius: var(--radius);
+    color: var(--text);
+    height: 100%;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .team-card:hover {
+    background: var(--elevated);
+    border-color: var(--text-muted);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  .team-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    background: var(--elevated);
+    margin-bottom: var(--space-2);
+  }
+  .team-card:hover .team-avatar {
+    border-color: var(--red);
+  }
+  .team-handle {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .team-role {
+    font-size: 0.8rem;
+    color: var(--text-muted);
   }
 
   .community {
