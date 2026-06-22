@@ -21,6 +21,7 @@ export const SITE = {
   ],
   social: {
     github: 'https://github.com/redsecc/website',
-    discord: 'https://discord.gg/k6p98bYkgH',
+    // Vanity redirect that always points at the current Discord invite.
+    discord: 'https://discord.redsec.cc',
   },
 } as const;

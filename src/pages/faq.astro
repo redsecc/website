@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../lib/site';
+import { withBase } from '../lib/base';
+import { abs, breadcrumb } from '../lib/seo';
+
+const LEARN = 'https://learn.redsec.cc';
+
+// Answers may contain simple inline HTML (links). They're authored here, so
+// they're safe to render with set:html; JSON-LD uses a tag-stripped version.
+const faqs: { q: string; a: string }[] = [
+  {
+    q: 'Is RedSec really free?',
+    a: `Yes — completely. No accounts, no paywalls, no premium tier, and no ads. RedSec is open source on <a href="${SITE.social.github}">GitHub</a>.`,
+  },
+  {
+    q: 'Do I need an account?',
+    a: `No. There's no login, signup, or profile anywhere on RedSec. Open a page and start reading — that's the whole point.`,
+  },
+  {
+    q: 'Where are the lessons and learning content?',
+    a: `On the learning platform at <a href="${LEARN}">learn.redsec.cc</a>. It's organized like documentation — sections for CTFs, bug bounties, and finding vulnerabilities. This site (redsec.cc) is the front door.`,
+  },
+  {
+    q: 'Is any of this legal? Can I use these techniques anywhere?',
+    a: `The techniques are real and intended for <strong>authorized testing and education only</strong>. Only ever use them on systems you own or have explicit, written permission to test. Practice on intentionally-vulnerable targets and CTFs.`,
+  },
+  {
+    q: 'Do you track me or use cookies?',
+    a: `No. RedSec sets no cookies, ships no analytics, and makes no third-party requests. On the learning site, any progress is stored only in your own browser (localStorage) and never leaves your device.`,
+  },
+  {
+    q: "I'm a complete beginner — where do I start?",
+    a: `Head to <a href="${LEARN}/getting-started/welcome">Getting started</a> on the learning site, set up a practice environment, then pick the track that interests you: CTFs, bug bounties, or finding vulnerabilities.`,
+  },
+  {
+    q: 'How can I contribute?',
+    a: `RedSec is open source — open an issue or pull request on <a href="${SITE.social.github}">GitHub</a> to suggest lessons, fix mistakes, or add new sections. New contributors are welcome.`,
+  },
+  {
+    q: 'How do I join the community?',
+    a: `Jump into our <a href="${SITE.social.discord}">Discord</a>. It's the best place to ask questions, share writeups, and hang out with other learners.`,
+  },
+  {
+    q: 'How do I report a problem with the site or content?',
+    a: `Open an issue on <a href="${SITE.social.github}">GitHub</a> or let us know in <a href="${SITE.social.discord}">Discord</a>.`,
+  },
+];
+
+const strip = (s: string) => s.replace(/<[^>]+>/g, '');
+const jsonLd = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: strip(f.a) },
+    })),
+  },
+  breadcrumb([{ name: 'FAQ', path: '/faq' }]),
+];
+---
+
+<BaseLayout
+  title="FAQ"
+  description="Frequently asked questions about RedSec — is it free, do you need an account, is it legal, and where to start."
+  jsonLd={jsonLd}
+>
+  <section class="section">
+    <div class="container faq">
+      <header class="page-head">
+        <span class="eyebrow">FAQ</span>
+        <h1>Frequently asked questions</h1>
+        <p class="lead">
+          The short answers. Still stuck? Ask in
+          <a href={SITE.social.discord}>Discord</a>.
+        </p>
+      </header>
+
+      <ul class="faq-list">
+        {
+          faqs.map((f) => (
+            <li>
+              <details class="faq-item">
+                <summary class="faq-q">{f.q}</summary>
+                <div class="faq-a" set:html={f.a} />
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq {
+    max-width: var(--maxw-prose);
+  }
+  .page-head {
+    margin-bottom: var(--space-8);
+  }
+  .page-head h1 {
+    margin-bottom: var(--space-4);
+  }
+  .faq-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .faq-item {
+    border: var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface);
+    padding: 0 var(--space-6);
+  }
+  .faq-item[open] {
+    border-color: var(--text-muted);
+    padding-bottom: var(--space-4);
+  }
+  .faq-q {
+    cursor: pointer;
+    padding: var(--space-4) 0;
+    font-weight: 500;
+    color: var(--text);
+    list-style-position: inside;
+  }
+  .faq-q:hover {
+    color: var(--red-hover);
+  }
+  .faq-item[open] > .faq-q {
+    margin-bottom: var(--space-2);
+    border-bottom: var(--hairline);
+    padding-bottom: var(--space-3);
+  }
+  .faq-a {
+    color: var(--text-secondary);
+  }
+  .faq-a :global(a) {
+    color: var(--red-hover);
+  }
+</style>
