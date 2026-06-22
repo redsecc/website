@@ -1,15 +1,29 @@
 # RedSec
 
-A free, open learning center for red teaming. Static site, **no accounts, no
-backend, no trackers** — anyone lands one click from a lesson.
+A free, open project for learning red teaming. Static, **no accounts, no
+backend, no trackers**.
+
+## Two sites, two branches
+
+This repo holds two Astro sites that share one brand/design system:
+
+| Branch  | Site | Domain | What it is |
+| ------- | ---- | ------ | ---------- |
+| `main`  | Marketing / landing | `redsec.cc` | Hero, About, links out to the learning platform. **No learning materials.** |
+| `learn` | Learning platform | `learn.redsec.cc` | Paths, lessons, labs, reference — the actual content. |
+
+> **GitHub Pages note:** a single repo can host only one Pages site. `main`
+> deploys to `redsec.cc` from this repo. To serve `learn.redsec.cc`, deploy the
+> `learn` branch from a separate repo (or another host) — Pages can't publish
+> two custom domains from one repo.
 
 - **Stack:** [Astro](https://astro.build) (static output), MDX content
-  collections, [Expressive Code](https://expressive-code.com) for code blocks,
+  collections (on `learn`), [Expressive Code](https://expressive-code.com),
   self-hosted fonts ([Inter](https://fontsource.org/fonts/inter) +
   [JetBrains Mono](https://fontsource.org/fonts/jetbrains-mono)).
 - **No third-party requests:** no Google Fonts CDN, no analytics, no cookies.
-- **Learner state:** progress is stored in `localStorage` only (key
-  `redsec:progress`) and is per-device — never synced to a server.
+- **Learner state (learn):** progress is stored in `localStorage` only (key
+  `redsec:progress`), per-device — never synced to a server.
 
 ## Prerequisites
 

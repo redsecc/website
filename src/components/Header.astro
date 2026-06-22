@@ -4,10 +4,8 @@ import { withBase } from '../lib/base';
 import { SITE } from '../lib/site';
 
 const nav = [
-  { label: 'Paths', href: withBase('/paths') },
-  { label: 'Labs', href: withBase('/labs') },
-  { label: 'Reference', href: withBase('/reference') },
   { label: 'About', href: withBase('/about') },
+  { label: 'Learn', href: 'https://learn.redsec.cc', external: true },
 ];
 
 const social = [
@@ -44,17 +42,30 @@ const isActive = (href: string) => {
       <nav id="primary-nav" class="primary-nav" aria-label="Primary">
         <ul>
           {
-            nav.map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  class:list={['nav-link', { active: isActive(item.href) }]}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))
+            nav.map((item) =>
+              item.external ? (
+                <li>
+                  <a
+                    href={item.href}
+                    class="nav-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {item.label} ↗
+                  </a>
+                </li>
+              ) : (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={['nav-link', { active: isActive(item.href) }]}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              )
+            )
           }
           <li class="nav-social">
             {

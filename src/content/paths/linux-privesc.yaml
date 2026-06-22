@@ -1,8 +1,0 @@
-title: Linux privilege escalation
-slug: linux-privesc
-order: 1
-icon: "#"
-summary: >-
-  Go from a low-privilege foothold to root. Enumerate the system the way an
-  attacker does, then turn misconfigurations — SUID binaries, sudo rules, and
-  file capabilities — into a shell that owns the box.

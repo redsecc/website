@@ -1,14 +1,31 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PathCard from '../components/PathCard.astro';
 import Logo from '../components/Logo.astro';
 import { Code } from 'astro-expressive-code/components';
 import { withBase } from '../lib/base';
+import { SITE } from '../lib/site';
 
-const paths = (await getCollection('paths')).sort((a, b) => a.data.order - b.data.order);
-const lessons = await getCollection('lessons');
-const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).length;
+const LEARN = 'https://learn.redsec.cc';
+
+// Marketing teasers — these link out to the learning platform; the actual
+// learning materials live on learn.redsec.cc, not here.
+const offerings = [
+  {
+    title: 'Paths',
+    blurb: 'Structured tracks that take you from enumeration to exploitation, in order.',
+    href: `${LEARN}/paths`,
+  },
+  {
+    title: 'Labs',
+    blurb: 'Guided challenges you run yourself, locally, on targets you own.',
+    href: `${LEARN}/labs`,
+  },
+  {
+    title: 'Reference',
+    blurb: "Fast cheatsheets for when you're mid-engagement and just need the command.",
+    href: `${LEARN}/reference`,
+  },
+];
 ---
 
 <BaseLayout>
@@ -22,14 +39,12 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
         </h1>
         <p class="lead">
           RedSec is a free, open learning center for offensive security. No
-          signup, no login, no tracking — you're one click from your first
-          lesson.
+          signup, no login, no tracking — start with the techniques the moment
+          you land.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href={withBase('/paths')}>
-            Start now — no account needed
-          </a>
-          <a class="btn" href={withBase('/reference')}>Browse the reference</a>
+          <a class="btn btn-primary" href={LEARN}>Start learning →</a>
+          <a class="btn" href={withBase('/about')}>What is RedSec?</a>
         </div>
         <p class="hero-note mono">No cookies. No analytics. No third-party requests.</p>
       </div>
@@ -40,33 +55,30 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
           <Logo size={48} />
         </div>
         <Code
-          code={`# find binaries that run as their owner — often root\nfind / -perm -4000 2>/dev/null`}
+          code={`$ redsec --start\n[+] free · open · no account needed\n[>] launching platform → learn.redsec.cc`}
           lang="bash"
           frame="terminal"
-          title="enumerate SUID binaries"
+          title="redsec"
         />
       </div>
     </div>
   </section>
 
-  <!-- Featured paths -->
+  <!-- What you'll find -->
   <section class="section">
     <div class="container">
       <div class="section-head">
-        <h2>Learning paths</h2>
-        <a class="mono section-link" href={withBase('/paths')}>All paths →</a>
+        <h2>What you'll find</h2>
+        <a class="mono section-link" href={LEARN}>Open the platform →</a>
       </div>
-      <div class="grid grid-2">
+      <div class="grid grid-3">
         {
-          paths.map((p) => (
-            <PathCard
-              title={p.data.title}
-              summary={p.data.summary}
-              slug={p.data.slug}
-              icon={p.data.icon}
-              order={p.data.order}
-              lessonCount={countFor(p.data.slug)}
-            />
+          offerings.map((o) => (
+            <a class="offer-card" href={o.href}>
+              <h3 class="offer-title">{o.title}</h3>
+              <p class="offer-blurb">{o.blurb}</p>
+              <span class="offer-go mono" aria-hidden="true">learn.redsec.cc →</span>
+            </a>
           ))
         }
       </div>
@@ -88,6 +100,24 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
         education</strong>. The techniques are real; use them only on systems
         you own or have explicit permission to test.
       </p>
+    </div>
+  </section>
+
+  <!-- Community -->
+  <section class="section community">
+    <div class="container community-inner">
+      <div>
+        <h2>Built in the open</h2>
+        <p class="lead">
+          RedSec is free and open source. Come contribute lessons, file issues,
+          or just hang out.
+        </p>
+      </div>
+      <div class="community-actions">
+        <a class="btn" href={SITE.social.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class="btn" href={SITE.social.discord} target="_blank" rel="noopener noreferrer">Discord ↗</a>
+        <a class="btn btn-primary" href={LEARN}>Start learning →</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -131,14 +161,12 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
     background: var(--surface);
     border: var(--hairline);
     border-radius: var(--radius);
-    /* signature angular chamfer */
     clip-path: var(--chamfer);
     padding: var(--space-6);
   }
   .hero-mark {
     margin-bottom: var(--space-4);
   }
-  /* keep expressive-code flush inside the accent */
   .hero-accent :global(.expressive-code) {
     margin: 0;
   }
@@ -148,6 +176,7 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
     align-items: baseline;
     justify-content: space-between;
     margin-bottom: var(--space-8);
+    gap: var(--space-4);
   }
   .section-head h2 {
     margin: 0;
@@ -155,8 +184,47 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
   .section-link {
     color: var(--text-secondary);
     font-size: 0.85rem;
+    white-space: nowrap;
   }
   .section-link:hover {
+    color: var(--red-hover);
+  }
+
+  .offer-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--surface);
+    border: var(--hairline);
+    border-radius: var(--radius);
+    padding: var(--space-6);
+    color: var(--text);
+    height: 100%;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .offer-card:hover {
+    background: var(--elevated);
+    border-color: var(--text-muted);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  .offer-title {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  .offer-blurb {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+  .offer-go {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: var(--hairline);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+  .offer-card:hover .offer-go {
     color: var(--red-hover);
   }
 
@@ -165,5 +233,21 @@ const countFor = (slug: string) => lessons.filter((l) => l.data.path === slug).l
   }
   .blurb {
     max-width: var(--maxw-prose);
+  }
+
+  .community {
+    border-top: var(--hairline);
+  }
+  .community-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+  .community-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
 </style>
