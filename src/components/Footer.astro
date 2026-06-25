@@ -47,7 +47,10 @@ const legal = [
       }
     </nav>
   </div>
-
+    <nav class="footer-nav" aria-label="Legal">
+      {legal.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+  </div>
   <div class="container footer-base">
     <span>© {year} RedSec</span>
     <span class="footer-disclaimer">
