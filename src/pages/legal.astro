@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const description =
+  'Legal and acceptable-use notes for RedSec learning content.';
+---
+
+<BaseLayout title="Legal" description={description}>
+  <section class="policy-page">
+    <div class="container policy-wrap">
+      <span class="eyebrow">Legal</span>
+      <h1>Legal and acceptable use</h1>
+      <p class="lead">
+        RedSec content is educational. It is not permission to test systems you
+        do not own or operate without explicit authorization.
+      </p>
+
+      <h2>Authorized use only</h2>
+      <p>
+        Use the lessons, labs, and examples only in your own environment, in a
+        CTF, or under a written scope where testing is allowed. You are
+        responsible for understanding and following the rules that apply to your
+        location, target, program, school, employer, or platform.
+      </p>
+
+      <h2>No professional advice</h2>
+      <p>
+        The material is provided for general learning. It is not legal advice,
+        compliance advice, or a substitute for guidance from a qualified
+        professional.
+      </p>
+
+      <h2>No warranty</h2>
+      <p>
+        The site is provided as-is. RedSec does not promise that content is
+        complete, current, error-free, or suitable for a specific environment.
+        Always validate techniques in a safe lab before relying on them.
+      </p>
+
+      <h2>Privacy</h2>
+      <p>
+        This learning site sets no cookies, ships no analytics, and makes no
+        third-party requests from its pages. Progress, if any, is stored only on
+        your device.
+      </p>
+
+      <h2>Responsible disclosure</h2>
+      <p>
+        If you find a vulnerability in a real system while learning, stop
+        testing, preserve only necessary evidence, and follow the target
+        owner's disclosure process.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .policy-page {
+    padding-block: var(--space-24);
+  }
+  .policy-wrap {
+    max-width: var(--maxw-prose);
+  }
+  .policy-wrap h2 {
+    margin-top: var(--space-12);
+  }
+</style>

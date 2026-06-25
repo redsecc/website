@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const description =
+  'The RedSec community code of conduct for respectful, authorized, and education-focused learning.';
+---
+
+<BaseLayout title="Code of Conduct" description={description}>
+  <section class="policy-page">
+    <div class="container policy-wrap">
+      <span class="eyebrow">Community</span>
+      <h1>Code of Conduct</h1>
+      <p class="lead">
+        RedSec is for learning security skills safely, legally, and without
+        turning practice into harm.
+      </p>
+
+      <h2>Expected behavior</h2>
+      <ul>
+        <li>Practice only in labs, CTFs, owned systems, or explicitly authorized scopes.</li>
+        <li>Keep proofs minimal, reversible, and respectful of real users and data.</li>
+        <li>Share knowledge without harassment, gatekeeping, or personal attacks.</li>
+        <li>Credit sources, tools, writeups, and researchers when you build on their work.</li>
+        <li>Report issues responsibly and follow the rules of each platform or program.</li>
+      </ul>
+
+      <h2>Not allowed</h2>
+      <ul>
+        <li>Attacking systems without permission.</li>
+        <li>Sharing stolen data, live credentials, malware, or instructions for harm.</li>
+        <li>Targeting people, communities, or organizations outside an authorized scope.</li>
+        <li>Using RedSec spaces to coordinate abuse, spam, fraud, or evasion.</li>
+      </ul>
+
+      <h2>How this is handled</h2>
+      <p>
+        Community maintainers may remove content, limit access, or escalate
+        serious safety issues when behavior conflicts with this code. The goal
+        is to keep the learning environment useful, respectful, and safe.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .policy-page {
+    padding-block: var(--space-24);
+  }
+  .policy-wrap {
+    max-width: var(--maxw-prose);
+  }
+  .policy-wrap h2 {
+    margin-top: var(--space-12);
+  }
+</style>
