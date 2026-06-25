@@ -22,7 +22,6 @@ const legal = [
   { label: 'Legal', href: 'https://learn.redsec.cc/legal/' },
 ];
 ---
-
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-about">
@@ -46,11 +45,12 @@ const legal = [
         ))
       }
     </nav>
-  </div>
+
     <nav class="footer-nav" aria-label="Legal">
       {legal.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
   </div>
+
   <div class="container footer-base">
     <span>© {year} RedSec</span>
     <span class="footer-disclaimer">
@@ -73,7 +73,7 @@ const legal = [
   }
   @media (min-width: 720px) {
     .footer-inner {
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
     }
   }
   .footer-tag {
